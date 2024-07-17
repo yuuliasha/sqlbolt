@@ -138,5 +138,59 @@ WHERE role IS NULL
 
 Exercise 9 — Tasks
 -- 1. List all movies and their combined sales in millions of dollars
+SELECT title, (domestic_sales + international_sales) / 1000000 AS gross_sales_millions
+FROM movies
+JOIN boxoffice ON movies.id = boxoffice.movie_id
 -- 2. List all movies and their ratings in percent
+SELECT title, rating * 10 AS rating_percent
+FROM movies
+JOIN boxoffice ON movies.id = boxoffice.movie_id
 -- 3. List all movies that were released on even number years
+SELECT title, year
+FROM movies
+WHERE year % 2 = 0
+
+Exercise 10 — Tasks
+-- 1. Find the longest time that an employee has been at the studio
+SELECT MAX(years_employed) as Max_years_employed
+FROM employees
+-- 2. For each role, find the average number of years employed by employees in that role
+SELECT role, AVG(years_employed) as Average_years_employed
+FROM employees
+GROUP BY role
+-- 3. Find the total number of employee years worked in each building
+SELECT building, SUM(years_employed) as Total_years_employed
+FROM employees
+GROUP BY building
+
+Exercise 11 — Tasks
+-- 1. Find the number of Artists in the studio (without a HAVING clause)
+SELECT role, COUNT(*) as Number_of_artists
+FROM employees
+WHERE role = "Artist"
+-- 2. Find the number of Employees of each role in the studio
+SELECT role, COUNT(*)
+FROM employees
+GROUP BY role
+-- 3. Find the total number of years employed by all Engineers
+SELECT role, SUM(years_employed)
+FROM employees
+GROUP BY role
+HAVING role = "Engineer"
+
+Exercise 12 — Tasks
+-- 1. Find the number of movies each director has directed
+SELECT director, COUNT(id) as Num_movies_directed
+FROM movies
+GROUP BY director
+-- 2. Find the total domestic and international sales that can be attributed to each director
+SELECT director, SUM(domestic_sales + international_sales) as Cumulative_sales_from_all_movies
+FROM movies
+INNER JOIN boxoffice ON movies.id = boxoffice.movie_id
+GROUP BY director
+
+Exercise 13 — Tasks
+-- 1.Add the studio's new production, Toy Story 4 to the list of movies (you can use any director)
+INSERT INTO movies VALUES (4, "Toy Story 4", "El Directore", 2015, 90)
+-- 2. Toy Story 4 has been released to critical acclaim! It had a rating of 8.7, and made 340 million domestically and 270 million internationally. Add the record to the BoxOffice table.
+INSERT INTO boxoffice VALUES (4, 8.7, 340000000, 270000000)
